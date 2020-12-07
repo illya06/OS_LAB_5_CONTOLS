@@ -9,6 +9,7 @@ using namespace std;
 int interfaceCall(int num);
 void loopCycle(int num);
 void getCurentProcesses(int num);
+void setThreadPriorityAt();
 
 //GLOBAL VARIABLES
 //-----------------
@@ -51,9 +52,9 @@ void getCurentProcesses(int num) {
 void processControl() {
     int num, option;
 
-    cout << "\nCONTROLING PROCESS : \n\tSELECT PROCESS : ";
+    cout << "\nCONTROLING THREADS : \n\tSELECT THREAD : ";
     cin >> num;
-    cout << "\t> WORKING WITH PID : \033[34m" << threadID[num] << "\033[0m \n";
+    cout << "\t> WORKING WITH TID : \033[34m" << threadID[num] << "\033[0m \n";
     cout << "\n\tOPTIONS : \n"
         << "\t[\033[92m0\033[0m] - SUSPEND\t[\033[92m1\033[0m] - UNSUSPEND\n";
     cout << "\tSELECT PRIORITY : ";
@@ -79,12 +80,13 @@ int interfaceCall(int num) {
     getCurentProcesses(num);
 
     cout << "\nOPTIONS : \n\t"
-        << "[\033[92m1\033[0m] : SET PRIORITY | [\033[92m2\033[0m] : PROCESS CONTROL | [\033[92m3\033[0m] :  RUN ALL | [\033[92m4\033[0m] : EXIT \n";
+        << "[\033[92m1\033[0m] : SET PRIORITY | [\033[92m2\033[0m] : THREAD CONTROL | [\033[92m3\033[0m] :  RUN ALL | [\033[92m4\033[0m] : EXIT \n";
     cout << "ENTER YOUR CHOISE : ";
     cin >> choice;
     switch (choice)
     {
     case 1:
+        setThreadPriorityAt();
         break;
     case 2:
         processControl();
@@ -114,10 +116,10 @@ void loopCycle(int num) {
 void setThreadPriorityAt() {
     int num, priority;
 
-    cout << "\nSETTING PRIORITY : \n\tSELECT PROCESS : ";
+    cout << "\nSETTING PRIORITY : \n\tSELECT THREAD : ";
     cin >> num;
-    cout << "\t> WORKING WITH PID : \033[34m" << threadID[num] << "\033[0m \n";
-    cout << "\n\tPRIORITY CLASSES : \n"
+    cout << "\t> WORKING WITH TID : \033[34m" << threadID[num] << "\033[0m \n";
+    cout << "\n\tPRIORITIES : \n"
         << "\t[\033[92m0\033[0m] - HIGH\t[\033[92m1\033[0m] - NORMAL\t[\033[92m2\033[0m] - REALTIME\n";
     cout << "\tSELECT PRIORITY : ";
     cin >> priority;
