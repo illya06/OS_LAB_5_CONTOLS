@@ -13,15 +13,20 @@ void getCurentProcesses(int num);
 //GLOBAL VARIABLES
 //-----------------
 DWORD threadID[16];
+HANDLE threads[16];
+DWORD priority_classes[] = { THREAD_PRIORITY_HIGHEST , THREAD_PRIORITY_NORMAL , THREAD_PRIORITY_TIME_CRITICAL };
 //-----------------
 
 int main(int argc, char* argv[])
 {
-    //cout << argc - 1 << endl;
     if (argc > 1) {
         for (int i = 0; i < argc - 1; i++) {
-            threadID[i] = atoi(argv[i+1]);
-            cout << threadID[i] << endl;
+            threadID[i] = atoi(argv[i + 1]);
+            threads[i] = OpenThread(THREAD_ALL_ACCESS, FALSE, threadID[i]);
+            if (threads[i] == NULL) {
+                cout << "\n\tERROR!!! Code : "<<GetLastError();
+                Sleep(1000);
+            }
         }
         loopCycle(argc - 1);
     }
@@ -43,13 +48,38 @@ void getCurentProcesses(int num) {
     cout << endl;
 }
 
+void processControl() {
+    int num, option;
+
+    cout << "\nCONTROLING PROCESS : \n\tSELECT PROCESS : ";
+    cin >> num;
+    cout << "\t> WORKING WITH PID : \033[34m" << threadID[num] << "\033[0m \n";
+    cout << "\n\tOPTIONS : \n"
+        << "\t[\033[92m0\033[0m] - SUSPEND\t[\033[92m1\033[0m] - UNSUSPEND\n";
+    cout << "\tSELECT PRIORITY : ";
+    cin >> option;
+
+    switch (option)
+    {
+    case 0:
+        SuspendThread(threads[num]);
+        break;
+    case 1:
+        ResumeThread(threads[num]);
+        break;
+    default:
+        break;
+    }
+    Sleep(700);
+}
+
 int interfaceCall(int num) {
     int choice;
     system("cls");
     getCurentProcesses(num);
 
     cout << "\nOPTIONS : \n\t"
-        << "[\033[92m1\033[0m] : SET PRIORITY | [\033[92m2\033[0m] : PROCESS CONTROL | [\033[92m3\033[0m] : EXIT \n";
+        << "[\033[92m1\033[0m] : SET PRIORITY | [\033[92m2\033[0m] : PROCESS CONTROL | [\033[92m3\033[0m] :  RUN ALL | [\033[92m4\033[0m] : EXIT \n";
     cout << "ENTER YOUR CHOISE : ";
     cin >> choice;
     switch (choice)
@@ -57,8 +87,12 @@ int interfaceCall(int num) {
     case 1:
         break;
     case 2:
+        processControl();
         break;
     case 3:
+        for (HANDLE thread : threads) {
+            ResumeThread(thread);
+        }
         break;
     default:
         break;
@@ -70,8 +104,30 @@ int interfaceCall(int num) {
 
 void loopCycle(int num) {
     int stop_ = interfaceCall(num);
-    while (stop_ != 3) {
-
+    while (stop_ != 4) {
         stop_ = interfaceCall(num);
     }
+}
+
+
+
+void setThreadPriorityAt() {
+    int num, priority;
+
+    cout << "\nSETTING PRIORITY : \n\tSELECT PROCESS : ";
+    cin >> num;
+    cout << "\t> WORKING WITH PID : \033[34m" << threadID[num] << "\033[0m \n";
+    cout << "\n\tPRIORITY CLASSES : \n"
+        << "\t[\033[92m0\033[0m] - HIGH\t[\033[92m1\033[0m] - NORMAL\t[\033[92m2\033[0m] - REALTIME\n";
+    cout << "\tSELECT PRIORITY : ";
+    cin >> priority;
+
+    if (!SetThreadPriority(threads[num], priority_classes[priority])) {
+        cout << "ERROR ACCURED | CODE : " << GetLastError();
+        Sleep(5000);
+    }
+    else {
+
+    }
+    Sleep(300);
 }
