@@ -80,7 +80,7 @@ int interfaceCall(int num) {
     getCurentProcesses(num);
 
     cout << "\nOPTIONS : \n\t"
-        << "[\033[92m1\033[0m] : SET PRIORITY | [\033[92m2\033[0m] : THREAD CONTROL | [\033[92m3\033[0m] :  RUN ALL | [\033[92m4\033[0m] : EXIT \n";
+        << "[\033[92m1\033[0m] : SET PRIORITY | [\033[92m2\033[0m] : THREAD CONTROL | [\033[92m3\033[0m] :  RUN ALL \n";
     cout << "ENTER YOUR CHOISE : ";
     cin >> choice;
     switch (choice)
@@ -106,7 +106,7 @@ int interfaceCall(int num) {
 
 void loopCycle(int num) {
     int stop_ = interfaceCall(num);
-    while (stop_ != 4) {
+    while (stop_ != 3) {
         stop_ = interfaceCall(num);
     }
 }
